@@ -1,76 +1,51 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 public class DirecciónMúsica : MonoBehaviour
 {
     AudioSource audioSource;
-    [SerializeField] List<TemaPersonaje> temasPersonajes;
-    [HideInInspector] public float pulsosPorSegundo;
-    public Action AlComenzarMúsica;
     [HideInInspector] public int totalPulsos;
+    float tiempoCanción = 0f;
+    public List<float> marcasTiempo;
+    public List<float> duraciónPulsos;
+    List<float> marcasTiempo_copia;
+    List<float> duraciónPulsos_copia;
     // Corrutinas
-    public IEnumerator ComenzarMúsica;
-
-    float timer = 0f;
-    public List<float> timestamps;
-
-    List<float> internal_ts;
-
-
+    public IEnumerator DirigirMúsica;
+    // Eventos
+    public Action AlAlcanzarMarca;
+    public Action AlComenzarMúsica;
+    public Action AlPararMúsica;
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        ComenzarMúsica = _ComenzarMúsica(temasPersonajes[0]);
-
-        internal_ts = new List<float>();
-        internal_ts = timestamps;
+        marcasTiempo_copia = new List<float>();
+        duraciónPulsos_copia = new List<float>();
+        marcasTiempo_copia = marcasTiempo;
+        duraciónPulsos_copia = duraciónPulsos;
+        DirigirMúsica = _DirigirMúsica();
     }
-
-    public void FixedUpdate()
+    public void ComenzarMúsica()
     {
-        timer += Time.deltaTime;
-
-        if (internal_ts.Count == 0) return;
-
-        if (timer >= internal_ts[0])
-        {
-            StartCoroutine(DirecciónJuego.main.instanciaciónSeñales.InstanciarSeñal());
-            internal_ts.RemoveAt(0);
-        }
+        StartCoroutine(DirigirMúsica);
     }
-
-    IEnumerator _ComenzarMúsica(TemaPersonaje temaPersonaje)
+    IEnumerator _DirigirMúsica()
     {
-        if (temaPersonaje.intro != null)
-        {
-            audioSource.clip = temaPersonaje.intro;
-            audioSource.Play();
-            yield return new WaitUntil(() => audioSource.isPlaying == false);
-        }
-        audioSource.clip = temaPersonaje.canción;
-        pulsosPorSegundo = ObtenerPulsosPorSegundo();
-
         audioSource.Play();
-
-        while (timestamps.Count > 0)
+        while (audioSource.isPlaying == true)
         {
-            totalPulsos = Mathf.RoundToInt(
-                audioSource.timeSamples / audioSource.clip.frequency * pulsosPorSegundo
-                );
+            if (audioSource.time >= marcasTiempo_copia[0] - duraciónPulsos_copia[0])
+            {
+                DirecciónJuego.direcciónMúsica.AlAlcanzarMarca();
+                marcasTiempo_copia.RemoveAt(0);
+                duraciónPulsos_copia.RemoveAt(0);
+            }
             yield return null;
         }
     }
-    public float ObtenerPulsosPorSegundo()
+    IEnumerator PararMúsica()
     {
-        return 60f / UniBpmAnalyzer.AnalyzeBpm(audioSource.clip);
-    }
-    [Serializable]
-    public class TemaPersonaje
-    {
-        public AudioClip canción;
-        public AudioClip intro;
-        public int finalMinijuego;
+        yield return null;
     }
 }

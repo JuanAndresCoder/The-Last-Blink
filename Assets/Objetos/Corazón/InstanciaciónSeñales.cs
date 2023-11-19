@@ -1,63 +1,51 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class InstanciaciónSeñales : MonoBehaviour
 {
     [SerializeField] GameObject señal;
-    [SerializeField] List<SeñalRitmoMaster> listaSeñales;
+    public List<SeñalRitmoMaster> listaSeñales;
     Transform puntoInstanciación;
     SeñalRitmoMaster señalRitmoMaster;
-    [Range(0, 50)] public int margenError;
-    // Corrutinas
-    public IEnumerator InstanciarSeñales;
     void Start()
     {
         listaSeñales = new List<SeñalRitmoMaster>();
         señalRitmoMaster = señal.GetComponent<SeñalRitmoMaster>();
         puntoInstanciación = transform.GetChild(0);
-        InstanciarSeñales = _InstanciarSeñales();
         // NOTA: La propia señal subscribe la función de autodestrucción
     }
-    public void EmpezarInstanciación()
-    {
-        StartCoroutine(InstanciarSeñales);
-    }
-
-    public IEnumerator InstanciarSeñal()
-    {
-        SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación);
-        listaSeñales.Add(instanciaSeñal);
-
-        yield return null;
-    }
-
-    void PararInstanciación()
+    public void PararInstanciación()
     {
         foreach (SeñalRitmoMaster señalRitmoMaster in listaSeñales)
         {
 
         }
     }
-    IEnumerator _InstanciarSeñales()
+    void InstanciarSeñal()
     {
-        int pulsoActual = DirecciónJuego.direcciónMúsica.totalPulsos;
-        while (pulsoActual == DirecciónJuego.direcciónMúsica.totalPulsos) 
-        {
-            yield return null;
-        }
-        SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación);
+        float duraciónPulso = DirecciónJuego.direcciónMúsica.duraciónPulsos[0];
+        SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación, duraciónPulso);
         listaSeñales.Add(instanciaSeñal);
-
-        yield return null;
-
-        //StartCoroutine(_InstanciarSeñales());
     }
+    //IEnumerator _InstanciarSeñales()
+    //{
+    //    int pulsoActual = DirecciónJuego.direcciónMúsica.totalPulsos;
+    //    while (pulsoActual == DirecciónJuego.direcciónMúsica.totalPulsos) 
+    //    {
+    //        yield return null;
+    //    }
+    //    SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación);
+    //    listaSeñales.Add(instanciaSeñal);
+    //    yield return null;
+    //    //StartCoroutine(_InstanciarSeñales());
+    //}
     void OnEnable()
     {
-        //DirecciónJuego.direcciónMúsica.AlComenzarMúsica += EmpezarInstanciación;
+        DirecciónJuego.direcciónMúsica.AlAlcanzarMarca += InstanciarSeñal;
     }
     void OnDisable()
     {
-        //DirecciónJuego.direcciónMúsica.AlComenzarMúsica -= EmpezarInstanciación;
+        DirecciónJuego.direcciónMúsica.AlAlcanzarMarca -= InstanciarSeñal;
     }
 }

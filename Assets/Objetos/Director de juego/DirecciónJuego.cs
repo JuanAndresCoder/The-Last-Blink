@@ -3,26 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 public class DirecciónJuego : MonoBehaviour
 {
-    public static DirecciónJuego main;
-
-
-    public InstanciaciónSeñales instanciaciónSeñales;
-
+    public static InstanciaciónSeñales instanciaciónSeñales;
     public static DirecciónMúsica direcciónMúsica;
-
-    private void Awake()
+    void Awake()
+    {
+        StartCoroutine(ComenzarJuego());
+    }
+    IEnumerator ComenzarJuego()
     {
         direcciónMúsica = FindObjectOfType<DirecciónMúsica>(true);
         direcciónMúsica.enabled = true;
-
+        yield return new WaitUntil(() => direcciónMúsica.DirigirMúsica != null);
         instanciaciónSeñales = FindObjectOfType<InstanciaciónSeñales>(true);
         instanciaciónSeñales.enabled = true;
-
-        main = this;
-    }
-
-    void Start()
-    {
-        StartCoroutine(direcciónMúsica.ComenzarMúsica);
+        yield return new WaitUntil(() => direcciónMúsica.AlAlcanzarMarca != null);
+        direcciónMúsica.ComenzarMúsica();
     }
 }

@@ -92,6 +92,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   "animaci\xF3nSe\xF1alRitmo": {fileID: 0}
   "validezPulsaci\xF3n": {fileID: 0}
+  margenError: 25
+  "duraci\xF3nPulso": 0.85714287
 --- !u!114 &3797584702311818663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,4 +119,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54629f18c588d5e4282799b822ee61c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  margenError: 10
