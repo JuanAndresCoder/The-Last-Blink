@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 public class DirecciónMúsica : MonoBehaviour
 {
@@ -11,11 +12,30 @@ public class DirecciónMúsica : MonoBehaviour
     [HideInInspector] public int totalPulsos;
     // Corrutinas
     public IEnumerator ComenzarMúsica;
-    void Start()
+
+    float timer = 0f;
+    public List<float> timestamps;
+
+    void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         ComenzarMúsica = _ComenzarMúsica(temasPersonajes[0]);
     }
+
+    public void FixedUpdate()
+    {
+        timer += Time.deltaTime;
+
+        if (timestamps.Count == 0) return;
+
+        if (timer >= timestamps[0])
+        {
+            StartCoroutine(DirecciónJuego.main.instanciaciónSeñales.InstanciarSeñal());
+            timestamps.RemoveAt(0);
+        }
+    }
+
+
     IEnumerator _ComenzarMúsica(TemaPersonaje temaPersonaje)
     {
         if (temaPersonaje.intro != null)
@@ -26,10 +46,10 @@ public class DirecciónMúsica : MonoBehaviour
         }
         audioSource.clip = temaPersonaje.canción;
         pulsosPorSegundo = ObtenerPulsosPorSegundo();
-        yield return new WaitUntil(() => pulsosPorSegundo > 0);
+
         audioSource.Play();
-        AlComenzarMúsica();
-        while (true)
+
+        while (timestamps.Count > 0)
         {
             totalPulsos = Mathf.RoundToInt(
                 audioSource.timeSamples / audioSource.clip.frequency * pulsosPorSegundo

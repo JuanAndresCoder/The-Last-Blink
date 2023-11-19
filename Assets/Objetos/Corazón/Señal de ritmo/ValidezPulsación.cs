@@ -21,7 +21,7 @@ public class ValidezPulsación : MonoBehaviour
     }
     IEnumerator _EsperarPulsación()
     {
-        float pulsosPorSegundo = DirecciónJuego.direcciónMúsica.pulsosPorSegundo;
+        float pulsosPorSegundo = 1f;
         float tiempoInvalidez = pulsosPorSegundo - (pulsosPorSegundo * margenError / 100);
         float tiempoActual = 0;
         while (tiempoActual < tiempoInvalidez)

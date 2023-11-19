@@ -18,10 +18,19 @@ public class InstanciaciónSeñales : MonoBehaviour
         InstanciarSeñales = _InstanciarSeñales();
         // NOTA: La propia señal subscribe la función de autodestrucción
     }
-    void EmpezarInstanciación()
+    public void EmpezarInstanciación()
     {
         StartCoroutine(InstanciarSeñales);
     }
+
+    public IEnumerator InstanciarSeñal()
+    {
+        SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación);
+        listaSeñales.Add(instanciaSeñal);
+
+        yield return null;
+    }
+
     void PararInstanciación()
     {
         foreach (SeñalRitmoMaster señalRitmoMaster in listaSeñales)
@@ -38,14 +47,17 @@ public class InstanciaciónSeñales : MonoBehaviour
         }
         SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación);
         listaSeñales.Add(instanciaSeñal);
-        StartCoroutine(_InstanciarSeñales());
+
+        yield return null;
+
+        //StartCoroutine(_InstanciarSeñales());
     }
     void OnEnable()
     {
-        DirecciónJuego.direcciónMúsica.AlComenzarMúsica += EmpezarInstanciación;
+        //DirecciónJuego.direcciónMúsica.AlComenzarMúsica += EmpezarInstanciación;
     }
     void OnDisable()
     {
-        DirecciónJuego.direcciónMúsica.AlComenzarMúsica -= EmpezarInstanciación;
+        //DirecciónJuego.direcciónMúsica.AlComenzarMúsica -= EmpezarInstanciación;
     }
 }
