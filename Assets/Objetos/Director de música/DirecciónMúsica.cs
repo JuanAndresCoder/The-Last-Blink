@@ -16,25 +16,30 @@ public class DirecciónMúsica : MonoBehaviour
     float timer = 0f;
     public List<float> timestamps;
 
+    List<float> internal_ts;
+
+
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         ComenzarMúsica = _ComenzarMúsica(temasPersonajes[0]);
+
+        internal_ts = new List<float>();
+        internal_ts = timestamps;
     }
 
     public void FixedUpdate()
     {
         timer += Time.deltaTime;
 
-        if (timestamps.Count == 0) return;
+        if (internal_ts.Count == 0) return;
 
-        if (timer >= timestamps[0])
+        if (timer >= internal_ts[0])
         {
             StartCoroutine(DirecciónJuego.main.instanciaciónSeñales.InstanciarSeñal());
-            timestamps.RemoveAt(0);
+            internal_ts.RemoveAt(0);
         }
     }
-
 
     IEnumerator _ComenzarMúsica(TemaPersonaje temaPersonaje)
     {

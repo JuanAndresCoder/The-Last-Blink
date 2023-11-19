@@ -8,7 +8,6 @@ public class DirecciónJuego : MonoBehaviour
 
     public InstanciaciónSeñales instanciaciónSeñales;
 
-
     public static DirecciónMúsica direcciónMúsica;
 
     private void Awake()

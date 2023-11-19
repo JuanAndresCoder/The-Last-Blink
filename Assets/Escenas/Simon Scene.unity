@@ -656,6 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9065b5e1ba3d2d14eac80f4072f45ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  "instanciaci\xF3nSe\xF1ales": {fileID: 1188386886}
 --- !u!1 &1188386882
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,11 +781,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   temasPersonajes:
-  - "canci\xF3n": {fileID: 8300000, guid: e479902d5184c024fb084decd45bb8c9, type: 3}
+  - "canci\xF3n": {fileID: 8300000, guid: f22248659032abf4f9da3338a2f1601c, type: 3}
     intro: {fileID: 0}
     finalMinijuego: 0
   pulsosPorSegundo: 0
   totalPulsos: 0
+  timestamps:
+  - 0
+  - 1.286
+  - 1.714
+  - 3
+  - 3.429
+  - 4.714
+  - 5.143
+  - 6.857
+  - 8.143
+  - 8.571
+  - 8.571
 --- !u!82 &1231023827
 AudioSource:
   m_ObjectHideFlags: 0
