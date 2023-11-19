@@ -5,34 +5,35 @@ using UnityEngine;
 public class ValidezPulsación : MonoBehaviour
 {
     SeñalRitmoMaster señalRitmoMaster;
+    [HideInInspector] public int margenError;
     bool esVálida;
     public Action AlAcertarPulsación;
     public Action AlFallarPulsación;
+
     // Corrutinas
     IEnumerator EsperarPulsación;
     void Start()
     {
         señalRitmoMaster = GetComponent<SeñalRitmoMaster>();
-        // Suscripciones al acertar
-        AlAcertarPulsación += Destruirse;
-        AlAcertarPulsación += DarAcierto;
-        // Suscripciones al fallar
-        AlFallarPulsación += Destruirse;
-        AlFallarPulsación += DarFallo;
+        AlAcertarPulsación += Destruir;
+        AlFallarPulsación += Destruir;
         EsperarPulsación = _EsperarPulsación();
         StartCoroutine(EsperarPulsación);
     }
     IEnumerator _EsperarPulsación()
     {
-        float tiempoInvalidez = señalRitmoMaster.duraciónPulso - (señalRitmoMaster.duraciónPulso + señalRitmoMaster.margenError / 100);
+        float pulsosPorSegundo = 1f;
+        float tiempoInvalidez = pulsosPorSegundo - (pulsosPorSegundo * margenError / 100);
         float tiempoActual = 0;
+
+        esVálida = true;
+
         while (tiempoActual < tiempoInvalidez)
         {
             tiempoActual += Time.deltaTime;
             yield return null;
         }
-        esVálida = true;
-        while (tiempoActual < señalRitmoMaster.duraciónPulso)
+        while (tiempoActual < pulsosPorSegundo)
         {
             tiempoActual += Time.deltaTime;
             yield return null;
@@ -40,33 +41,27 @@ public class ValidezPulsación : MonoBehaviour
         esVálida = false;
         AlFallarPulsación();
     }
-    void DarAcierto()
+    public bool ComprobarValidez()
     {
-        Debug.Log("Acertaste!");
-    }
-    void DarFallo()
-    {
-        Debug.Log("Fallaste!");
-    }
-    void Destruirse()
-    {
-        DirecciónJuego.instanciaciónSeñales.listaSeñales.Remove(señalRitmoMaster);
-        Destroy(gameObject);
-    }
-    public void ComprobarValidez()
-    {
-        StopCoroutine(EsperarPulsación);
+
         if (esVálida == true)
         {
+            Debug.Log(esVálida);
             AlAcertarPulsación();
         }
         else { AlFallarPulsación(); }
+
+        return esVálida;
+    }
+    void Destruir()
+    {
+        DirecciónJuego.instanciaciónSeñales.listaSeñales.RemoveAt(0);
+
+        Destroy(gameObject);
     }
     void OnDestroy()
     {
-        AlAcertarPulsación -= Destruirse;
-        AlAcertarPulsación -= DarAcierto;
-        AlFallarPulsación -= DarFallo;
-        AlFallarPulsación -= Destruirse;
+        AlAcertarPulsación -= Destruir;
+        AlFallarPulsación -= Destruir;
     }
 }
