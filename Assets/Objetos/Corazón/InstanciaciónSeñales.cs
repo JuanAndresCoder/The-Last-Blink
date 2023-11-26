@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class InstanciaciónSeñales : MonoBehaviour
 {
@@ -10,42 +11,50 @@ public class InstanciaciónSeñales : MonoBehaviour
     SeñalRitmoMaster señalRitmoMaster;
     void Start()
     {
-        listaSeñales = new List<SeñalRitmoMaster>();
         señalRitmoMaster = señal.GetComponent<SeñalRitmoMaster>();
         puntoInstanciación = transform.GetChild(0);
-        // NOTA: La propia señal subscribe la función de autodestrucción
-    }
-    public void PararInstanciación()
-    {
-        foreach (SeñalRitmoMaster señalRitmoMaster in listaSeñales)
-        {
-
-        }
     }
     void InstanciarSeñal()
     {
-        float duraciónPulso = DirecciónJuego.direcciónMúsica.duraciónPulsos[0];
+        float duraciónPulso = DirecciónJuego.direcciónMúsica.ObtenerDuraciónPulso();
         SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación, duraciónPulso);
         listaSeñales.Add(instanciaSeñal);
     }
-    //IEnumerator _InstanciarSeñales()
-    //{
-    //    int pulsoActual = DirecciónJuego.direcciónMúsica.totalPulsos;
-    //    while (pulsoActual == DirecciónJuego.direcciónMúsica.totalPulsos) 
-    //    {
-    //        yield return null;
-    //    }
-    //    SeñalRitmoMaster instanciaSeñal = señalRitmoMaster.Instanciar(puntoInstanciación);
-    //    listaSeñales.Add(instanciaSeñal);
-    //    yield return null;
-    //    //StartCoroutine(_InstanciarSeñales());
-    //}
+    void DeshabilitarSeñales()
+    {
+        foreach (SeñalRitmoMaster señalRitmoMaster in listaSeñales)
+        {
+            señalRitmoMaster.validezPulsación.enabled = false;
+        }
+    }
+    public void ComprobarValidez()
+    {
+        SeñalRitmoMaster señalActual = listaSeñales.First();
+        bool esVálida = señalActual.validezPulsación.ObtenerValidez();
+        if (esVálida == true) { DarAcierto(señalActual); }
+        else { DarFallo(señalActual); }
+    }
+    void DarAcierto(SeñalRitmoMaster señalActual)
+    {
+        Debug.Log("Acierto");
+        listaSeñales.Remove(señalActual);
+        Destroy(señalActual.gameObject);
+    }
+    void DarFallo(SeñalRitmoMaster señalActual)
+    {
+        Debug.Log("Fallo");
+        listaSeñales.Remove(señalActual);
+        Destroy(señalActual.gameObject);
+        DirecciónJuego.AlFallarPulsación();
+    }
     void OnEnable()
     {
         DirecciónJuego.direcciónMúsica.AlAlcanzarMarca += InstanciarSeñal;
+        DirecciónJuego.AlFallarPulsación += DeshabilitarSeñales;
     }
     void OnDisable()
     {
         DirecciónJuego.direcciónMúsica.AlAlcanzarMarca -= InstanciarSeñal;
+        DirecciónJuego.AlFallarPulsación += DeshabilitarSeñales;
     }
 }

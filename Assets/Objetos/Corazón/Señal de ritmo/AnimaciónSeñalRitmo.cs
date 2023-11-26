@@ -17,8 +17,8 @@ public class AnimaciónSeñalRitmo : MonoBehaviour
     IEnumerator Contraerse()
     {
         StartCoroutine(Aparecer());
-        float freno = 1 - (señalRitmoMaster.margenError / 100);
-        float velocidadAnimación = rectTransform.localScale.x  * freno / señalRitmoMaster.duraciónPulso;
+        float freno = 1 - (señalRitmoMaster.margenError / 100f);
+        float velocidadAnimación = (rectTransform.localScale.x / señalRitmoMaster.duraciónPulso) * freno;
         while (rectTransform.localScale.x > 0)
         {
             rectTransform.localScale -= Vector3.one * velocidadAnimación * Time.deltaTime;

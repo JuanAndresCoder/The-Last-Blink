@@ -5,63 +5,42 @@ using UnityEngine;
 public class ValidezPulsación : MonoBehaviour
 {
     SeñalRitmoMaster señalRitmoMaster;
-    [HideInInspector] public int margenError;
     bool esVálida;
-    public Action AlAcertarPulsación;
-    public Action AlFallarPulsación;
-
     // Corrutinas
     IEnumerator EsperarPulsación;
     void Start()
     {
         señalRitmoMaster = GetComponent<SeñalRitmoMaster>();
-        AlAcertarPulsación += Destruir;
-        AlFallarPulsación += Destruir;
         EsperarPulsación = _EsperarPulsación();
         StartCoroutine(EsperarPulsación);
     }
     IEnumerator _EsperarPulsación()
     {
-        float pulsosPorSegundo = 1f;
-        float tiempoInvalidez = pulsosPorSegundo - (pulsosPorSegundo * margenError / 100);
+        float pulsosPorSegundo = señalRitmoMaster.duraciónPulso;
+        float tiempoInvalidez = pulsosPorSegundo - (pulsosPorSegundo * señalRitmoMaster.margenError / 100f);
+        float tiempoExtra = pulsosPorSegundo + (pulsosPorSegundo * señalRitmoMaster.margenError / 100f); ;
         float tiempoActual = 0;
-
-        esVálida = true;
-
         while (tiempoActual < tiempoInvalidez)
         {
             tiempoActual += Time.deltaTime;
             yield return null;
         }
-        while (tiempoActual < pulsosPorSegundo)
+        esVálida = true;
+        while (tiempoActual < tiempoExtra)
         {
             tiempoActual += Time.deltaTime;
             yield return null;
         }
         esVálida = false;
-        AlFallarPulsación();
+        DirecciónJuego.instanciaciónSeñales.ComprobarValidez();
     }
-    public bool ComprobarValidez()
+    public bool ObtenerValidez()
     {
-
-        if (esVálida == true)
-        {
-            Debug.Log(esVálida);
-            AlAcertarPulsación();
-        }
-        else { AlFallarPulsación(); }
-
+        StopCoroutine(EsperarPulsación);
         return esVálida;
     }
-    void Destruir()
+    void OnDisable()
     {
-        DirecciónJuego.instanciaciónSeñales.listaSeñales.RemoveAt(0);
-
-        Destroy(gameObject);
-    }
-    void OnDestroy()
-    {
-        AlAcertarPulsación -= Destruir;
-        AlFallarPulsación -= Destruir;
+        StopCoroutine(EsperarPulsación);
     }
 }

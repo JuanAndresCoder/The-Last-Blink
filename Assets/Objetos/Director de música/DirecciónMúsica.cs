@@ -6,46 +6,73 @@ public class DirecciónMúsica : MonoBehaviour
 {
     AudioSource audioSource;
     [HideInInspector] public int totalPulsos;
-    float tiempoCanción = 0f;
-    public List<float> marcasTiempo;
-    public List<float> duraciónPulsos;
-    List<float> marcasTiempo_copia;
-    List<float> duraciónPulsos_copia;
+    [SerializeField] InformaciónTema informaciónTema;
+    int númeroMarca;
     // Corrutinas
-    public IEnumerator DirigirMúsica;
+    IEnumerator DirigirMúsica;
+    IEnumerator BajarVolumen;
     // Eventos
+    public Action AlTerminarIntro;
     public Action AlAlcanzarMarca;
-    public Action AlComenzarMúsica;
-    public Action AlPararMúsica;
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        marcasTiempo_copia = new List<float>();
-        duraciónPulsos_copia = new List<float>();
-        marcasTiempo_copia = marcasTiempo;
-        duraciónPulsos_copia = duraciónPulsos;
         DirigirMúsica = _DirigirMúsica();
+        BajarVolumen = _BajarVolumen();
     }
-    public void ComenzarMúsica()
+    void ComenzarMúsica()
     {
         StartCoroutine(DirigirMúsica);
     }
+    void PararMúsica()
+    {
+        StartCoroutine(BajarVolumen);
+    }
+    public float ObtenerDuraciónPulso()
+    {
+        return informaciónTema.informaciónMarcas[númeroMarca].duraciónPulso;
+    } 
+    void OnEnable()
+    {
+        DirecciónJuego.AlComenzarJuego += ComenzarMúsica;
+        DirecciónJuego.AlFallarPulsación += PararMúsica;
+    }
+    void OnDisable()
+    {
+        DirecciónJuego.AlComenzarJuego -= ComenzarMúsica;
+        DirecciónJuego.AlFallarPulsación -= PararMúsica;
+    }
     IEnumerator _DirigirMúsica()
     {
+        float tiempoAparición = 0;
+        yield return new WaitForSeconds(1);
         audioSource.Play();
-        while (audioSource.isPlaying == true)
+        // Que no se olvide la intro
+        AlTerminarIntro();
+        while (true)
         {
-            if (audioSource.time >= marcasTiempo_copia[0] - duraciónPulsos_copia[0])
+            tiempoAparición = 
+                informaciónTema.informaciónMarcas[númeroMarca].tiempoMarca - 
+                informaciónTema.informaciónMarcas[númeroMarca].duraciónPulso;
+            if (audioSource.time >= tiempoAparición)
             {
                 DirecciónJuego.direcciónMúsica.AlAlcanzarMarca();
-                marcasTiempo_copia.RemoveAt(0);
-                duraciónPulsos_copia.RemoveAt(0);
+                númeroMarca++;
             }
             yield return null;
         }
     }
-    IEnumerator PararMúsica()
+    IEnumerator _BajarVolumen()
     {
-        yield return null;
+        StopCoroutine(DirigirMúsica);
+        númeroMarca = 0;
+        float tiempoAnimación = AnimaciónUI.ObtenerTiempoAnimación();
+        float velocidadBajada = audioSource.volume / tiempoAnimación;
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= velocidadBajada * Time.deltaTime;
+            yield return null;
+        }
+        audioSource.Stop();
     }
 }
