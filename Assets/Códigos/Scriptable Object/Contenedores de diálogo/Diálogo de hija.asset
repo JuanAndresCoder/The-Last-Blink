@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50b545b4ec47bb47bc7c3e27fa8df62, type: 3}
   m_Name: "Di\xE1logo de hija"
   m_EditorClassIdentifier: 
-  "listaL\xEDneas": []
+  "listaL\xEDneas":
+  - "l\xEDnea": "Ojal\xE1 hubi\xE9ramos ido a ver a los m\xE9dicos antes de tiempo\u2026
+      lo siento mam\xE1"
+    tiempoEnPantalla: 2

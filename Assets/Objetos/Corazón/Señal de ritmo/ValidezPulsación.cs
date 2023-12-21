@@ -6,13 +6,13 @@ public class ValidezPulsación : MonoBehaviour
 {
     SeñalRitmoMaster señalRitmoMaster;
     bool esVálida;
+    [HideInInspector] public bool permitirDestrucción;
     // Corrutinas
-    IEnumerator EsperarPulsación;
+    Coroutine EsperarPulsación;
     void Start()
     {
         señalRitmoMaster = GetComponent<SeñalRitmoMaster>();
-        EsperarPulsación = _EsperarPulsación();
-        StartCoroutine(EsperarPulsación);
+        EsperarPulsación = StartCoroutine(_EsperarPulsación());
     }
     IEnumerator _EsperarPulsación()
     {
@@ -31,16 +31,16 @@ public class ValidezPulsación : MonoBehaviour
             tiempoActual += Time.deltaTime;
             yield return null;
         }
-        esVálida = false;
-        DirecciónJuego.instanciaciónSeñales.ComprobarValidez();
+        if (permitirDestrucción == true) { Destroy(gameObject); }
+        else 
+        {
+            esVálida = false;
+            DirecciónJuego.instanciaciónSeñales.ComprobarValidez();
+        }
     }
     public bool ObtenerValidez()
     {
         StopCoroutine(EsperarPulsación);
         return esVálida;
-    }
-    void OnDisable()
-    {
-        StopCoroutine(EsperarPulsación);
     }
 }

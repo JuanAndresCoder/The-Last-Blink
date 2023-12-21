@@ -5,10 +5,12 @@ public class DirecciónJuego : MonoBehaviour
 {
     public static InstanciaciónSeñales instanciaciónSeñales;
     public static DirecciónMúsica direcciónMúsica;
+    public static AnimaciónUI animaciónUI;
     static EntradaTeclado entradaTeclado;
     static DirecciónPersonajes direcciónPersonajes;
     // Eventos
-    public static Action AlComenzarJuego;
+    public static Action AlPulsarBotónInicio;
+    public static Action AlMontarNivel;
     public static Action AlFallarPulsación;
     void Start()
     {
@@ -16,7 +18,7 @@ public class DirecciónJuego : MonoBehaviour
         entradaTeclado = FindObjectOfType<EntradaTeclado>(true);
         instanciaciónSeñales = FindObjectOfType<InstanciaciónSeñales>(true);
         direcciónPersonajes = FindObjectOfType<DirecciónPersonajes>(true);
-        ComenzarJuego();
+        animaciónUI =  FindObjectOfType<AnimaciónUI>(true);
     }
     void ComenzarJuego()
     {
@@ -28,26 +30,33 @@ public class DirecciónJuego : MonoBehaviour
     }
     void OnEnable()
     {
+        AlPulsarBotónInicio += ComenzarJuego;
         AlFallarPulsación += TerminarJuego;
     }
     void OnDisable()
     {
+        AlPulsarBotónInicio -= ComenzarJuego;
         AlFallarPulsación -= TerminarJuego;
     }
     IEnumerator MontarNivel()
     {
-        direcciónMúsica.enabled = true;
-        instanciaciónSeñales.enabled = true;
-        yield return new WaitUntil(() => direcciónMúsica.AlAlcanzarMarca != null);
-        yield return new WaitForSeconds(1);
-        direcciónPersonajes.enabled = true;
+        if (instanciaciónSeñales.enabled == false) 
+        {
+            instanciaciónSeñales.enabled = true;
+            yield return new WaitUntil(() => direcciónMúsica.AlAlcanzarMarca != null);
+            direcciónPersonajes.enabled = true;
+            yield return new WaitUntil(() => direcciónMúsica.AlTerminarIntro != null);
+        }
+        animaciónUI.AbrirOjos();
+        yield return new WaitUntil(() => 
+            animaciónUI.animator.IsInTransition(0) == false);
+        yield return new WaitForSeconds(animaciónUI.ObtenerTiempoAnimación());
+        AlMontarNivel();
         entradaTeclado.enabled = true;
-        AlComenzarJuego();
     }
     IEnumerator DesmontarNivel()
     {
         entradaTeclado.enabled = false;
-        yield return new WaitForSeconds(AnimaciónUI.ObtenerTiempoAnimación());
-        Debug.Log("Game Over");
+        yield return new WaitForSeconds(animaciónUI.ObtenerTiempoAnimación());
     }
 }

@@ -21,7 +21,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -60,10 +60,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 512
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -138,37 +138,16 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: speechbubbles_normal
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 569
-        width: 497
-        height: 443
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 151, y: 188, z: 50, w: 47}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a241cb6f2d7b9464ba788edcd694b953
-      internalID: 21300000
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: speechbubble round
       rect:
         serializedVersion: 2
-        x: 22
-        y: 285
-        width: 245
-        height: 223
+        x: 24
+        y: 290
+        width: 242
+        height: 214
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 18, y: 82, z: 39, w: 16}
+      border: {x: 14, y: 79, z: 36, w: 14}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -204,13 +183,13 @@ TextureImporter:
       name: speechbubbles thinking
       rect:
         serializedVersion: 2
-        x: 248
-        y: 54
-        width: 264
-        height: 216
+        x: 257
+        y: 56
+        width: 241
+        height: 214
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 46, y: 15, z: 29, w: 78}
+      border: {x: 37, y: 15, z: 29, w: 78}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -255,9 +234,12 @@ TextureImporter:
     nameFileIdTable:
       speechbubble angry: 21300004
       speechbubble round: 21300002
+      speechbubbles round tip: 1227582367
+      speechbubbles round_tip: 101436012
       speechbubbles serious: 21300008
       speechbubbles thinking: 21300006
       speechbubbles_normal: 21300000
+      speechbubbles_sprites_0: 941038246
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class DirecciónPersonajes : MonoBehaviour
 {
     List<DiálogoPersonaje> listaPersonajes;
-    Animator animator;
+    [HideInInspector] public Animator animator;
     [HideInInspector] public int númeroPersonaje;
     void Start()
     {
@@ -19,6 +20,10 @@ public class DirecciónPersonajes : MonoBehaviour
     void PararConversación()
     {
         animator.enabled = false;
+        foreach (DiálogoPersonaje personaje in listaPersonajes) 
+        {
+            personaje.Reiniciar();
+        }
     }
     public void IniciarDiálogo()
     {

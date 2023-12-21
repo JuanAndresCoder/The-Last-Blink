@@ -24,8 +24,9 @@ public class InstanciaciónSeñales : MonoBehaviour
     {
         foreach (SeñalRitmoMaster señalRitmoMaster in listaSeñales)
         {
-            señalRitmoMaster.validezPulsación.enabled = false;
+            señalRitmoMaster.validezPulsación.permitirDestrucción = true;
         }
+        listaSeñales.Clear();
     }
     public void ComprobarValidez()
     {
@@ -36,13 +37,11 @@ public class InstanciaciónSeñales : MonoBehaviour
     }
     void DarAcierto(SeñalRitmoMaster señalActual)
     {
-        Debug.Log("Acierto");
         listaSeñales.Remove(señalActual);
         Destroy(señalActual.gameObject);
     }
     void DarFallo(SeñalRitmoMaster señalActual)
     {
-        Debug.Log("Fallo");
         listaSeñales.Remove(señalActual);
         Destroy(señalActual.gameObject);
         DirecciónJuego.AlFallarPulsación();
@@ -55,6 +54,6 @@ public class InstanciaciónSeñales : MonoBehaviour
     void OnDisable()
     {
         DirecciónJuego.direcciónMúsica.AlAlcanzarMarca -= InstanciarSeñal;
-        DirecciónJuego.AlFallarPulsación += DeshabilitarSeñales;
+        DirecciónJuego.AlFallarPulsación -= DeshabilitarSeñales;
     }
 }

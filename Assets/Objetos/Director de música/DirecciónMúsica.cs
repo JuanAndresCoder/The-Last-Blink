@@ -8,25 +8,24 @@ public class DirecciónMúsica : MonoBehaviour
     [HideInInspector] public int totalPulsos;
     [SerializeField] InformaciónTema informaciónTema;
     int númeroMarca;
-    // Corrutinas
-    IEnumerator DirigirMúsica;
-    IEnumerator BajarVolumen;
+    float volumen;
+    Coroutine DirigirMúsica;
     // Eventos
     public Action AlTerminarIntro;
     public Action AlAlcanzarMarca;
-    void Awake()
+    void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        DirigirMúsica = _DirigirMúsica();
-        BajarVolumen = _BajarVolumen();
+        volumen = audioSource.volume;
     }
     void ComenzarMúsica()
     {
-        StartCoroutine(DirigirMúsica);
+        DirigirMúsica = StartCoroutine(_DirigirMúsica());
     }
     void PararMúsica()
     {
-        StartCoroutine(BajarVolumen);
+        StopCoroutine(DirigirMúsica);
+        StartCoroutine(_BajarVolumen());
     }
     public float ObtenerDuraciónPulso()
     {
@@ -34,18 +33,17 @@ public class DirecciónMúsica : MonoBehaviour
     } 
     void OnEnable()
     {
-        DirecciónJuego.AlComenzarJuego += ComenzarMúsica;
+        DirecciónJuego.AlMontarNivel += ComenzarMúsica;
         DirecciónJuego.AlFallarPulsación += PararMúsica;
     }
     void OnDisable()
     {
-        DirecciónJuego.AlComenzarJuego -= ComenzarMúsica;
+        DirecciónJuego.AlMontarNivel -= ComenzarMúsica;
         DirecciónJuego.AlFallarPulsación -= PararMúsica;
     }
     IEnumerator _DirigirMúsica()
     {
         float tiempoAparición = 0;
-        yield return new WaitForSeconds(1);
         audioSource.Play();
         // Que no se olvide la intro
         AlTerminarIntro();
@@ -64,9 +62,8 @@ public class DirecciónMúsica : MonoBehaviour
     }
     IEnumerator _BajarVolumen()
     {
-        StopCoroutine(DirigirMúsica);
         númeroMarca = 0;
-        float tiempoAnimación = AnimaciónUI.ObtenerTiempoAnimación();
+        float tiempoAnimación = DirecciónJuego.animaciónUI.ObtenerTiempoAnimación();
         float velocidadBajada = audioSource.volume / tiempoAnimación;
         while (audioSource.volume > 0)
         {
@@ -74,5 +71,6 @@ public class DirecciónMúsica : MonoBehaviour
             yield return null;
         }
         audioSource.Stop();
+        audioSource.volume = volumen;
     }
 }

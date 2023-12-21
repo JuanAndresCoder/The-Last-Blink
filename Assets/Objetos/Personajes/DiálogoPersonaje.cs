@@ -19,7 +19,7 @@ public class DiálogoPersonaje : MonoBehaviour
         SpeechBubbleManager.Instance.AddSpeechBubble(puntoInstanciación, informaciónLínea.línea, tipoBurbuja, informaciónLínea.tiempoEnPantalla);
         númeroLínea++;
     }
-    void OnDisable()
+    public void Reiniciar()
     {
         númeroLínea = 0;
     }

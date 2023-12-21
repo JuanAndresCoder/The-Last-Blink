@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50b545b4ec47bb47bc7c3e27fa8df62, type: 3}
   m_Name: "Di\xE1logo de marido"
   m_EditorClassIdentifier: 
-  "listaL\xEDneas": []
+  "listaL\xEDneas":
+  - "l\xEDnea": "Buenas tardes cari\xF1o, \xBFc\xF3mo te encuentras?"
+    tiempoEnPantalla: 2
