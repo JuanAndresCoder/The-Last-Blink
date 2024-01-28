@@ -15,4 +15,8 @@ MonoBehaviour:
   "listaL\xEDneas":
   - "l\xEDnea": "Ojal\xE1 hubi\xE9ramos ido a ver a los m\xE9dicos antes de tiempo\u2026
       lo siento mam\xE1"
-    tiempoEnPantalla: 2
+    tiempoEnPantalla: 4.3
+  - "l\xEDnea": "Estaremos contigo hasta que est\xE9s preparada"
+    tiempoEnPantalla: 3.5
+  - "l\xEDnea": "Pap\xE1 deber\xEDa de llegar pronto, todo ir\xE1 bien"
+    tiempoEnPantalla: 3.5

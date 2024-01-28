@@ -13,5 +13,10 @@ MonoBehaviour:
   m_Name: "Di\xE1logo de nieto"
   m_EditorClassIdentifier: 
   "listaL\xEDneas":
-  - "l\xEDnea": "Hac\xEDa mucho tiempo que no nos ve\xEDamos"
-    tiempoEnPantalla: 2
+  - "l\xEDnea": "Hola yaya, mam\xE1 me ha dicho que te encuentras mal. "
+    tiempoEnPantalla: 3.2
+  - "l\xEDnea": Toma
+    tiempoEnPantalla: 1.5
+  - "l\xEDnea": Este cromo me da suerte cuando lo llevo, espero que te encuentres
+      mejor
+    tiempoEnPantalla: 4

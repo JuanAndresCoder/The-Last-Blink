@@ -14,4 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   "listaL\xEDneas":
   - "l\xEDnea": "Buenas tardes cari\xF1o, \xBFc\xF3mo te encuentras?"
-    tiempoEnPantalla: 2
+    tiempoEnPantalla: 3.1
+  - "l\xEDnea": "\xBFTe acuerdas de aquel d\xEDa en el parque cerca de nuestro antiguo
+      hogar? \xBFD\xF3nde salvamos a Magdaleno?"
+    tiempoEnPantalla: 5.5
+  - "l\xEDnea": "He pasado por ah\xED y seguro que no adivinas que han hecho"
+    tiempoEnPantalla: 3.7
+  - "l\xEDnea": "Muchos ni\xF1os est\xE1n ahora jugando, por fin el ayuntamiento
+      ha hecho algo bueno para la comunidad, c\xF3mo t\xFA deseabas"
+    tiempoEnPantalla: 5
+  - "l\xEDnea": Ahora descansa, nos vemos pronto
+    tiempoEnPantalla: 3.7
