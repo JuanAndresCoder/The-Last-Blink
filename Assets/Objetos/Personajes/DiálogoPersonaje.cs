@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using VikingCrew.Tools.UI;
 public class DiálogoPersonaje : MonoBehaviour
